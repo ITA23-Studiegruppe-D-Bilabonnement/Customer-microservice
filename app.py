@@ -10,7 +10,9 @@ from flasgger import swag_from
 app = Flask(__name__)
 
 
-
+@app.route("/")
+def homepoint():
+    return jsonify("TEST: TEST")
 
 
 app.run(debug=True, host="0.0.0.0")
