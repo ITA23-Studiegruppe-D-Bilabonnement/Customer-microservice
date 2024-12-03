@@ -15,4 +15,4 @@ def homepoint():
     return jsonify("TEST: TEST")
 
 
-app.run(debug=True, host="0.0.0.0")
+app.run(debug=True)
