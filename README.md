@@ -54,18 +54,16 @@ This Flask-based microservice provides functionality for managing users, includi
         - `400 Bad Request`: User not found.
         - `500 Internal Server Error`: Unexpected error.
 
-## Database
-
-The service uses SQLite for persistent user storage. The database schema is as follows:
-
 ## Environment Variables
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `JWT_SECRET_KEY` | Yes | - | Secret key for JWT token generation |
 | `PORT` | No | 5000 | Port to run the service on |
 | `SQLITE_DB_PATH` | Yes | - | Path to SQLite database file |
-| `GITHUB_MICROSERVICE_URL` | No | http://github_microservice:5001 | URL of the GitHub microservice |
 
+## Database
+
+The service uses SQLite for persistent user storage. The database schema is as follows:
 
 ```sql
 CREATE TABLE users (
