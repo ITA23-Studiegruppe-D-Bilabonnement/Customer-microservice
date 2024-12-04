@@ -200,6 +200,7 @@ def login_user():
         #first_row = data[0]
         #print(first_row[1])
         #Just some notes on how to access specific data returned
+# JUST ADDED THIS TO FORCE UPDATE ON IMAGE ( DOCKERHUB -> AZURE - CHECK IF THE DATA STAYS)
 
 @app.route("/listofusers", methods=["GET"])
 def test():
