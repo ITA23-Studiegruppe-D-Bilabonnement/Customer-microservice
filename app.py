@@ -6,7 +6,6 @@ import os
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from dotenv import load_dotenv
 from flasgger import swag_from
-import json
 
 app = Flask(__name__)
 
