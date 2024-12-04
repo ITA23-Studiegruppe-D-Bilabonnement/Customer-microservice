@@ -1,0 +1,64 @@
+tags:
+  - name: Authentication
+summary: Register a new user
+description: Allows a user to register with email, first name, last name, and password.
+parameters:
+  - in: body
+    name: body
+    required: true
+    schema:
+      type: object
+      required:
+        - email
+        - first_name
+        - last_name
+        - password
+      properties:
+        email:
+          type: string
+          example: "johndoe@example.com"
+        first_name:
+          type: string
+          example: "John"
+        last_name:
+          type: string
+          example: "Doe"
+        password:
+          type: string
+          example: "securepassword123"
+responses:
+  200:
+    description: User successfully created
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Successfully created user"
+  400:
+    description: Missing required fields
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "You're missing one of the following: email, first_name, last_name, password"
+  409:
+    description: Email already in use
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Email already in use"
+  500:
+    description: Internal server error
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "OOPS! Something went wrong :("
+        message:
+          type: string
+          example: "Error details"

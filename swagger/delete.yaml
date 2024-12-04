@@ -1,0 +1,39 @@
+tags:
+  - name: Authentication
+summary: Delete a user
+description: Deletes a user from the database by their ID.
+parameters:
+  - in: path
+    name: id
+    required: true
+    type: integer
+    description: The ID of the user to be deleted.
+    example: 123
+responses:
+  200:
+    description: User successfully deleted
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "User deleted successfully"
+  400:
+    description: User not found
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Couldn't find the user"
+  500:
+    description: Internal server error
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "OOPS! Something went wrong :("
+        message:
+          type: string
+          example: "Error details"

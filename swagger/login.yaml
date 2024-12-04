@@ -1,0 +1,60 @@
+tags:
+  - name: Authentication
+summary: Login a user
+description: Authenticates a user by email and password and returns a JWT token.
+parameters:
+  - in: body
+    name: body
+    required: true
+    schema:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "johndoe@example.com"
+        password:
+          type: string
+          example: "securepassword123"
+responses:
+  200:
+    description: Login successful, returns JWT token
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Login successful"
+        JWT-Token:
+          type: string
+          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+  400:
+    description: Missing email or password
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Email or password is missing"
+  401:
+    description: Incorrect email or password
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Wrong email or password"
+  500:
+    description: Internal server error
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "OOPS! Something went wrong :("
+        message:
+          type: string
+          example: "Error details"

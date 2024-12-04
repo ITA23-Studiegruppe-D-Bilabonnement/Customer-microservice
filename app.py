@@ -6,6 +6,7 @@ import os
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from dotenv import load_dotenv
 from flasgger import swag_from
+from swagger.swagger_config import init_swagger
 
 app = Flask(__name__)
 
@@ -17,6 +18,8 @@ DB_PATH = os.getenv('SQLITE_DB_PATH')
 PORT = int(os.getenv('PORT', 5000))
 jwt = JWTManager(app)
 
+# Initialize Swagger
+init_swagger(app)
 
 
 #Database creation
@@ -51,6 +54,21 @@ def homepoint():
                 "last_name": "STRING",
                 "password": "STRING"
                 }
+            },
+            {
+            "PATH": "/delete/<id>",
+            "METHOD": "DELETE",
+            "DESCRIPTION": "Deletes user from database",
+            "PARAMETER": "id"
+            },
+            {
+            "PATH": "/login",
+            "METHOD": "POST",
+            "DESCRIPTION": "Login user",
+            "BODY": {
+                "email": "STRING",
+                "password": "STRING"
+            }
             }
         ]
     })
@@ -59,6 +77,7 @@ def homepoint():
 
 # Register user endpoint - "/register"
 @app.route("/register", methods=["POST"])
+@swag_from("swagger/register.yaml")
 def register_user():
     data = request.get_json()
 
@@ -66,7 +85,7 @@ def register_user():
     if not data or "email" not in data or "first_name" not in data or "last_name" not in data or "password" not in data:
         return jsonify({
             "Error": "Youre missing one of the following: email, first_name, last_name, password"
-        })
+        }), 400
 
 
     email = data["email"]
@@ -92,22 +111,23 @@ def register_user():
             conn.commit()
             return jsonify({
                 "Message": "Successfully created user"
-            })
+            }), 200
         # Handle execptions/errors
         # Null values is already checked - so we only need to handle if the email isnt unique
     except sqlite3.IntegrityError:
         return jsonify({
             "Error": "Email already in use"
-        })
+        }), 400
         # Handle random errors
     except Exception as e:
         return jsonify({
             "Error": "OOPS! Something went wrong :(",
             "Message": f'{e}'
-        })
+        }), 500
 
 # Delete user endpoints - "/delete"
 @app.route("/delete/<int:id>", methods=["DELETE"])
+@swag_from("swagger/delete.yaml")
 def delete_user(id):
 
     try:
@@ -119,21 +139,22 @@ def delete_user(id):
             if cur.rowcount == 0:
                 return jsonify({
                     "Error": "Couldnt find the user"
-                })
+                }), 400
             
             return jsonify({
                 "message": "User deleted succesfully"
-            })
+            }), 200
         #Handle random errors
     except Exception as e:
         return jsonify({
             "Error": "OOPS! Something went wrong :(",
             "Message": f'{e}'
-        })
+        }), 500
         
 
 # Login user endpoint - "/login"
 @app.route("/login", methods=["POST"])
+@swag_from("swagger/login.yaml")
 def login_user():
 
     data = request.get_json()
@@ -142,7 +163,7 @@ def login_user():
     if not data or "email" not in data or "password" not in data:
         return jsonify({
             "Error": "Email or password is missing"
-        })
+        }), 400
     
     email = data["email"]
     password = data["password"]
@@ -159,19 +180,19 @@ def login_user():
                 return jsonify({
                     "Message": "Login successful",
                     "JWT-Token": jwt_token
-                })
+                }), 200
             
             # If the password didnt match
             return jsonify({
                 "Error": "Wrong email or password"
-            })
+            }), 401
         
         # Handle random errors
     except Exception as e:
         return jsonify({
             "Error": "OOPS! Something went wrong :(",
             "Message": f'{e}'
-        })
+        }), 500
         
 
 #ONLY TESTNING ENDPOINT - REMOVE AFTER TESTING IS DONE
