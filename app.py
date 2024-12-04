@@ -56,7 +56,7 @@ def homepoint():
                 }
             },
             {
-            "PATH": "/delete/<id>",
+            "PATH": "/delete/id",
             "METHOD": "DELETE",
             "DESCRIPTION": "Deletes user from database",
             "PARAMETER": "id"
