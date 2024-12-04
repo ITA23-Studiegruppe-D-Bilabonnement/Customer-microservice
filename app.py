@@ -156,7 +156,7 @@ def login_user():
 
             #Check to see if the password matches
             if user and bcrypt.checkpw(password.encode('utf-8'), user[1]):
-                jwt_token = create_access_token(user[0])
+                jwt_token = create_access_token(identity=user[0])
                 return jsonify({
                     "Message": "Login successful",
                     "JWT-Token": jwt_token
@@ -201,4 +201,4 @@ def test():
             "message": users
         })
 
-app.run(debug=True)
+app.run(debug=False)
