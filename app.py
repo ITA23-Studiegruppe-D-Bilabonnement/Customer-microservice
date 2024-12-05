@@ -23,7 +23,7 @@ init_swagger(app)
 
 
 #Database creation
-def initialise__db():
+def initialize_db():
     with sqlite3.connect(DB_PATH) as conn:
         cur = conn.cursor()
         cur.execute(""" CREATE TABLE IF NOT EXISTS users
@@ -36,7 +36,7 @@ def initialise__db():
                     )""")
         conn.commit()
         
-initialise__db()
+initialize_db()
 
 #Homepoint - "/"
 @app.route("/", methods=["GET"])
@@ -187,7 +187,7 @@ def login_user():
                 "Error": "Wrong email or password"
             }), 401
         
-        # Handle random errors
+        # Handle random errors #####
     except Exception as e:
         return jsonify({
             "Error": "OOPS! Something went wrong :(",
