@@ -82,10 +82,13 @@ def register_user():
     data = request.get_json()
 
     #Check to see if the user has insert all the data
-    if not data or "email" not in data or "first_name" not in data or "last_name" not in data or "password" not in data:
-        return jsonify({
-            "Error": "Youre missing one of the following: email, first_name, last_name, password"
-        }), 400
+    required_fields = ["email","first_name","last_name","password"]
+    
+    for field in required_fields:
+        if not data or field not in data or not data[field]:
+            return jsonify({
+                "Error": f"Youre missing the {field} field"
+            }), 400
 
 
     email = data["email"]
