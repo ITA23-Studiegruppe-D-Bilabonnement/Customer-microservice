@@ -1,0 +1,27 @@
+tags:
+  - User Information
+summary: Retrieve user information
+description: Fetches the first name and last name of the logged-in user using their JWT identity.
+responses:
+  200:
+    description: User information retrieved successfully
+    schema:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: "John"
+        last_name:
+          type: string
+          example: "Doe"
+  500:
+    description: Internal server error
+    schema:
+      type: object
+      properties:
+        Error:
+          type: string
+          example: "OOPS! Something went wrong :("
+        Message:
+          type: string
+          example: "Error details"

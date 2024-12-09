@@ -22,7 +22,13 @@ swagger_config = {
                     "endpoint": 'delete',
                     "route": '/delete/<int:id>',
                     "spec": '/swagger/delete.yaml'
+                },
+                {
+                    "endpoint": 'user',
+                    "route": '/user',
+                    "spec": '/swagger/user_information.yaml'
                 }
+
             ],
             "rule_filter": lambda rule: True,
             "model_filter": lambda tag: True,

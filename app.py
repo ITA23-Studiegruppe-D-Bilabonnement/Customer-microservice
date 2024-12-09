@@ -69,13 +69,22 @@ def homepoint():
                 "email": "STRING",
                 "password": "STRING"
             }
+            },
+            {
+                "PATH": "/user",
+                "METHOD": "GET",
+                "DESCRIPTION": "Returns user information (first and last name) based on JWT-token(id)",
+                "AUTHORIZATION": {
+                    "REQUIRED": "Yes",
+                    "TYPE": "JWT token"
+                }
             }
         ]
     })
 
 
 
-# Register user endpoint - "/register"
+# Register user endpoint - "/register" POST # MAYBE CHANGE ENDPOINT TO USER
 @app.route("/register", methods=["POST"])
 @swag_from("swagger/register.yaml")
 def register_user():
@@ -83,14 +92,12 @@ def register_user():
 
     #Check to see if the user has insert all the data
     required_fields = ["email","first_name","last_name","password"]
-    
     for field in required_fields:
         if not data or field not in data or not data[field]:
             return jsonify({
                 "Error": f"Youre missing the {field} field"
             }), 400
-
-
+        
     email = data["email"]
     
     first_name = data["first_name"]
@@ -128,7 +135,7 @@ def register_user():
             "Message": f'{e}'
         }), 500
 
-# Delete user endpoints - "/delete"
+# Delete user endpoints - "/delete" DELETE # MAYBE CHANGE ENDPOINT TO USER
 @app.route("/delete/<int:id>", methods=["DELETE"])
 @swag_from("swagger/delete.yaml")
 def delete_user(id):
@@ -155,7 +162,7 @@ def delete_user(id):
         }), 500
         
 
-# Login user endpoint - "/login"
+# Login user endpoint - "/login" POST
 @app.route("/login", methods=["POST"])
 @swag_from("swagger/login.yaml")
 def login_user():
@@ -179,10 +186,12 @@ def login_user():
 
             #Check to see if the password matches
             if user and bcrypt.checkpw(password.encode('utf-8'), user[1]):
-                jwt_token = create_access_token(identity=user[0])
+                print(str(user[0]))
+                jwt_token = create_access_token(identity=str(user[0]))
+
                 return jsonify({
                     "Message": "Login successful",
-                    "JWT-Token": jwt_token
+                    "Authorization": jwt_token
                 }), 200
             
             # If the password didnt match
@@ -198,6 +207,40 @@ def login_user():
         }), 500
         
 
+# Retrieve user information endpoint - "/user" - GET - ENDPOINT FOR USERS
+@app.route("/user", methods=["GET"])
+@jwt_required()
+@swag_from("swagger/user_information.yaml")
+def user_information():
+    current_userid = get_jwt_identity()
+    
+    if not current_userid:
+        return jsonify({
+            "Error": "OOPS! Something went wrong :(",
+            "Message": "Couldnt find your information"
+        })
+
+    try:
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT first_name, last_name FROM users WHERE id = ?",(current_userid,))
+            data = cursor.fetchone()
+            return jsonify({
+                "first_name": data[0],
+                "last_name": data[1]
+            }), 200
+
+        # Handle random errors #####
+    except Exception as e:
+        return jsonify({
+            "Error": "OOPS! Something went wrong :(",
+            "Message": f'{e}'
+        }), 500
+    
+
+
+
+    
 #ONLY TESTNING ENDPOINT - REMOVE AFTER TESTING IS DONE
 # NOTES 
         #first_row = data[0]
