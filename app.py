@@ -226,6 +226,13 @@ def user_information():
             cursor = conn.cursor()
             cursor.execute("SELECT first_name, last_name FROM users WHERE id = ?",(current_userid,))
             data = cursor.fetchone()
+
+            #Check to see if it found the user
+            if not data:
+                return jsonify({
+                    "Error": "Couldnt find the user"
+                }), 404
+            
             return jsonify({
                 "first_name": data[0],
                 "last_name": data[1]
@@ -248,6 +255,13 @@ def user_information_search(id):
             cursor = conn.cursor()
             cursor.execute("SELECT first_name, last_name FROM users WHERE id = ?",(current_userid,))
             data = cursor.fetchone()
+
+            #Check to see if it found the user
+            if not data:
+                return jsonify({
+                    "Error": "Couldnt find the user"
+                }), 404
+
             return jsonify({
                 "first_name": data[0],
                 "last_name": data[1]
