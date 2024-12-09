@@ -45,7 +45,7 @@ def homepoint():
         "SERVICE": "CUSTOMER MICROSERVICE",
         "AVAILABLE ENDPOINTS": [
             {
-            "PATH": "/register",
+            "PATH": "/user",
             "METHOD": "POST",
             "DESCRIPTION": "Registers new user in the database",
             "BODY": {
@@ -56,7 +56,7 @@ def homepoint():
                 }
             },
             {
-            "PATH": "/delete/id",
+            "PATH": "/user/id",
             "METHOD": "DELETE",
             "DESCRIPTION": "Deletes user from database",
             "PARAMETER": "id"
@@ -73,19 +73,26 @@ def homepoint():
             {
                 "PATH": "/user",
                 "METHOD": "GET",
-                "DESCRIPTION": "Returns user information (first and last name) based on JWT-token(id)",
+                "DESCRIPTION": "Returns user information (first and last name) based on JWT-token(id) ",
                 "AUTHORIZATION": {
                     "REQUIRED": "Yes",
                     "TYPE": "JWT token"
                 }
+            },
+            {
+                "PATH": "/user/id",
+                "METHOD": "GET",
+                "DESCRIPTION": "Returns user information based on search by id ",
+                "PARAMETER": "id"
             }
         ]
     })
 
+#STIL NEED UPDATING ON "/" DOCUMENTATION ( TWO DIFFERENT OR COMBINE THE BOTH????(User information))
 
 
-# Register user endpoint - "/register" POST # MAYBE CHANGE ENDPOINT TO USER
-@app.route("/register", methods=["POST"])
+# Register user endpoint - "/user" METHOD(POST)
+@app.route("/user", methods=["POST"])
 @swag_from("swagger/register.yaml")
 def register_user():
     data = request.get_json()
@@ -135,8 +142,8 @@ def register_user():
             "Message": f'{e}'
         }), 500
 
-# Delete user endpoints - "/delete" DELETE # MAYBE CHANGE ENDPOINT TO USER
-@app.route("/delete/<int:id>", methods=["DELETE"])
+# Delete user endpoints - "/user/id" METHOD(DELETE)
+@app.route("/user/<int:id>", methods=["DELETE"])
 @swag_from("swagger/delete.yaml")
 def delete_user(id):
 
@@ -162,7 +169,7 @@ def delete_user(id):
         }), 500
         
 
-# Login user endpoint - "/login" POST
+# Login user endpoint - "/login" METHOD(POST)
 @app.route("/login", methods=["POST"])
 @swag_from("swagger/login.yaml")
 def login_user():
@@ -212,8 +219,8 @@ def login_user():
 @jwt_required()
 @swag_from("swagger/user_information.yaml")
 def user_information():
-    try:
 
+    try:
         current_userid = get_jwt_identity()
         with sqlite3.connect(DB_PATH) as conn:
             cursor = conn.cursor()

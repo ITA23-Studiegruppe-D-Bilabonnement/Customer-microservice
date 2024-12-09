@@ -15,12 +15,12 @@ swagger_config = {
                 },
                 {
                     "endpoint": 'register',
-                    "route": '/register',
+                    "route": '/user',
                     "spec": '/swagger/register.yaml'
                 },
                 {
                     "endpoint": 'delete',
-                    "route": '/delete/<int:id>',
+                    "route": '/user/<int:id>',
                     "spec": '/swagger/delete.yaml'
                 },
                 {

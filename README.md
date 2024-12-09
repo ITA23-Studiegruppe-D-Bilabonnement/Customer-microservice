@@ -4,9 +4,16 @@ This Flask-based microservice provides functionality for managing users, includi
 
 ## Endpoints
 
+| HTTP Method | Action             | Example Endpoint     | Notes                                   |
+|-------------|--------------------|----------------------|-----------------------------------------|
+| `GET`       | Retrieve a resource | `/users/{id}` or `/users` | Fetch a user based on JWT or search(id) |
+| `POST`      | Create a resource  | `/users`             | Register a new user.                    |
+| `DELETE`    | Delete a resource  | `/users/{id}`        | Delete a user.                          |
+
+
 - **Register a new user**
 
-    - **URL**: `/register`
+    - **URL**: `/user`
     - **Method**: `POST`
     - **Description**: Creates a new user account.
     - **Request Body**:
@@ -46,12 +53,21 @@ This Flask-based microservice provides functionality for managing users, includi
 
 - **Delete a user**
 
-    - **URL**: `/delete/<id>`
+    - **URL**: `/user/<id>`
     - **Method**: `DELETE`
     - **Description**: Deletes a specific user by ID.
     - **Response**:
         - `200 OK`: User deleted successfully.
         - `400 Bad Request`: User not found.
+        - `500 Internal Server Error`: Unexpected error.
+
+- **Get user information**
+
+    - **URL**: `/user` or `/user/<id>`
+    - **Method**: `GET`
+    - **Description**: Gets user information based on JWT-token or by manuel search(id)
+    - **Response**:
+        - `200 OK`: User information found.
         - `500 Internal Server Error`: Unexpected error.
 
 ## Environment Variables
