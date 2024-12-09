@@ -212,15 +212,9 @@ def login_user():
 @jwt_required()
 @swag_from("swagger/user_information.yaml")
 def user_information():
-    current_userid = get_jwt_identity()
-    
-    if not current_userid:
-        return jsonify({
-            "Error": "OOPS! Something went wrong :(",
-            "Message": "Couldnt find your information"
-        })
-
     try:
+
+        current_userid = get_jwt_identity()
         with sqlite3.connect(DB_PATH) as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT first_name, last_name FROM users WHERE id = ?",(current_userid,))
@@ -236,9 +230,28 @@ def user_information():
             "Error": "OOPS! Something went wrong :(",
             "Message": f'{e}'
         }), 500
-    
 
+# Tænk lige over om vi så skal fjerne den første der finder baseret på JWT
+@app.route("/user/<int:id>", methods=["GET"])
+def user_information_search(id):
 
+    try:
+        current_userid = id
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT first_name, last_name FROM users WHERE id = ?",(current_userid,))
+            data = cursor.fetchone()
+            return jsonify({
+                "first_name": data[0],
+                "last_name": data[1]
+            }), 200
+
+        # Handle random errors #####
+    except Exception as e:
+        return jsonify({
+            "Error": "OOPS! Something went wrong :(",
+            "Message": f'{e}'
+        }), 500
 
     
 #ONLY TESTNING ENDPOINT - REMOVE AFTER TESTING IS DONE
