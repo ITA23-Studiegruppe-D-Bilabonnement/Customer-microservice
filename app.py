@@ -102,11 +102,10 @@ def register_user():
     for field in required_fields:
         if not data or field not in data or not data[field]:
             return jsonify({
-                "Error": f"Youre missing the {field} field"
+                "error": f"Youre missing the {field} field"
             }), 400
         
     email = data["email"]
-    
     first_name = data["first_name"]
     last_name = data["last_name"]
     password = data["password"]
@@ -127,19 +126,19 @@ def register_user():
                         ) VALUES(?,?,?,?)""", (email, first_name, last_name, crypted_password))
             conn.commit()
             return jsonify({
-                "Message": "Successfully created user"
+                "message": "Successfully created user"
             }), 200
         # Handle execptions/errors
         # Null values is already checked - so we only need to handle if the email isnt unique
     except sqlite3.IntegrityError:
         return jsonify({
-            "Error": "Email already in use"
+            "error": "Email already in use"
         }), 400
         # Handle random errors
     except Exception as e:
         return jsonify({
-            "Error": "OOPS! Something went wrong :(",
-            "Message": f'{e}'
+            "error": "OOPS! Something went wrong :(",
+            "message": f'{e}'
         }), 500
 
 # Delete user endpoints - "/user/id" METHOD(DELETE)
@@ -155,7 +154,7 @@ def delete_user(id):
             #Check to see if the database was affected
             if cur.rowcount == 0:
                 return jsonify({
-                    "Error": "Couldnt find the user"
+                    "error": "Couldnt find the user"
                 }), 400
             
             return jsonify({
@@ -164,8 +163,8 @@ def delete_user(id):
         #Handle random errors
     except Exception as e:
         return jsonify({
-            "Error": "OOPS! Something went wrong :(",
-            "Message": f'{e}'
+            "error": "OOPS! Something went wrong :(",
+            "message": f'{e}'
         }), 500
         
 
@@ -179,7 +178,7 @@ def login_user():
     #Check to see if the user has insert all the data
     if not data or "email" not in data or "password" not in data:
         return jsonify({
-            "Error": "Email or password is missing"
+            "error": "Email or password is missing"
         }), 400
     
     email = data["email"]
@@ -197,20 +196,20 @@ def login_user():
                 jwt_token = create_access_token(identity=str(user[0]))
 
                 return jsonify({
-                    "Message": "Login successful",
-                    "Authorization": jwt_token
+                    "message": "Login successful",
+                    "authorization": jwt_token
                 }), 200
             
             # If the password didnt match
             return jsonify({
-                "Error": "Wrong email or password"
+                "error": "Wrong email or password"
             }), 401
         
         # Handle random errors #####
     except Exception as e:
         return jsonify({
-            "Error": "OOPS! Something went wrong :(",
-            "Message": f'{e}'
+            "error": "OOPS! Something went wrong :(",
+            "message": f'{e}'
         }), 500
         
 
@@ -230,7 +229,7 @@ def user_information():
             #Check to see if it found the user
             if not data:
                 return jsonify({
-                    "Error": "Couldnt find the user"
+                    "error": "Couldnt find the user"
                 }), 404
             
             return jsonify({
@@ -241,8 +240,8 @@ def user_information():
         # Handle random errors #####
     except Exception as e:
         return jsonify({
-            "Error": "OOPS! Something went wrong :(",
-            "Message": f'{e}'
+            "error": "OOPS! Something went wrong :(",
+            "message": f'{e}'
         }), 500
 
 # Tænk lige over om vi så skal fjerne den første der finder baseret på JWT
@@ -259,7 +258,7 @@ def user_information_search(id):
             #Check to see if it found the user
             if not data:
                 return jsonify({
-                    "Error": "Couldnt find the user"
+                    "error": "Couldnt find the user"
                 }), 404
 
             return jsonify({
@@ -270,11 +269,22 @@ def user_information_search(id):
         # Handle random errors #####
     except Exception as e:
         return jsonify({
-            "Error": "OOPS! Something went wrong :(",
-            "Message": f'{e}'
+            "error": "OOPS! Something went wrong :(",
+            "message": f'{e}'
         }), 500
-
     
+
+
+#SPØRGSMÅL TIL CLAUS
+# 1. Hvorfor "redirecter" den ikke med den valgt metode?
+# 2. Skal vi kunne udtrække dataen
+# 3. MÅSKE!!! Er det korrekt/fint gateway struktur: 2 endpoints til hver microservice("/" og resterende)
+
+
+# Egne tanker
+# 1. Giver det mening af have location med( Umiddelbart tænkte jeg ja, men???)
+    
+
 #ONLY TESTNING ENDPOINT - REMOVE AFTER TESTING IS DONE
 # NOTES 
         #first_row = data[0]
