@@ -86,7 +86,7 @@ def homepoint():
                 "PARAMETER": "id"
             }
         ]
-    })
+    }), 200
 
 #STIL NEED UPDATING ON "/" DOCUMENTATION ( TWO DIFFERENT OR COMBINE THE BOTH????(User information))
 

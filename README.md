@@ -81,11 +81,10 @@ This Flask-based microservice provides functionality for managing users, includi
 
 The service uses SQLite for persistent user storage. The database schema is as follows:
 
-```sql
-CREATE TABLE users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT UNIQUE NOT NULL,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    password TEXT NOT NULL
-);
+| Column      | Type      | Constraints          |
+|-------------|-----------|----------------------|
+| `id`        | INTEGER   | PRIMARY KEY AUTOINCREMENT |
+| `email`     | TEXT      | UNIQUE NOT NULL      |
+| `first_name`| TEXT      | NOT NULL             |
+| `last_name` | TEXT      | NOT NULL             |
+| `password`  | TEXT      | NOT NULL             |
