@@ -204,21 +204,19 @@ def login_user():
             return jsonify({
                 "error": "Wrong email or password"
             }), 401
-        
-        # Handle random errors #####
+         
+        # Handle random errors 
     except Exception as e:
         return jsonify({
             "error": "OOPS! Something went wrong :(",
             "message": f'{e}'
         }), 500
         
-
 # Retrieve user information endpoint - "/user" - GET - ENDPOINT FOR USERS
 @app.route("/user", methods=["GET"])
 @jwt_required()
 @swag_from("swagger/user_information.yaml")
-def user_information():
-
+def user_information(): 
     try:
         current_userid = get_jwt_identity()
         with sqlite3.connect(DB_PATH) as conn:
@@ -266,24 +264,15 @@ def user_information_search(id):
                 "last_name": data[1]
             }), 200
 
-        # Handle random errors #####
+        # Handle random errors 
     except Exception as e:
         return jsonify({
             "error": "OOPS! Something went wrong :(",
             "message": f'{e}'
         }), 500
     
-
-
-#SPØRGSMÅL TIL CLAUS
-# 1. Hvorfor "redirecter" den ikke med den valgt metode?
-# 2. Skal vi kunne udtrække dataen
-# 3. MÅSKE!!! Er det korrekt/fint gateway struktur: 2 endpoints til hver microservice("/" og resterende)
-
-
 # Egne tanker
 # 1. Giver det mening af have location med( Umiddelbart tænkte jeg ja, men???)
-    
 
 #ONLY TESTNING ENDPOINT - REMOVE AFTER TESTING IS DONE
 # NOTES 

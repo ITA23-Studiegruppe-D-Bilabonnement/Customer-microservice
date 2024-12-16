@@ -2,6 +2,27 @@
 
 This Flask-based microservice provides functionality for managing users, including registration, login, and deletion.
 
+# File structure
+```
+project/
+├── app.py                   
+├── swagger/                 
+│   ├── delete.yaml          
+│   ├── login.yaml           
+│   ├── register.yaml        
+│   ├── swagger_config.py    
+│   └── user_information.yaml
+├── .dockerignore            
+├── .env                     
+├── .github/                 
+│   └── workflows/           
+│       └── main_Customer-microservice.yml 
+├── .gitignore               
+├── Dockerfile               
+├── README.md                
+├── requirements.txt
+```
+
 ## Endpoints
 
 | HTTP Method | Action             | Example Endpoint     | Notes                                   |
