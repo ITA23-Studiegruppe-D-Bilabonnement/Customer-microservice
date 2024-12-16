@@ -2,7 +2,7 @@
 
 This Flask-based microservice provides functionality for managing users, including registration, login, and deletion.
 
-# File structure
+## File structure
 ```
 project/
 ├── app.py                   
