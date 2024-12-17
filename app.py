@@ -88,16 +88,13 @@ def homepoint():
         ]
     }), 200
 
-#STIL NEED UPDATING ON "/" DOCUMENTATION ( TWO DIFFERENT OR COMBINE THE BOTH????(User information))
-
-
 # Register user endpoint - "/user" METHOD(POST)
 @app.route("/user", methods=["POST"])
 @swag_from("swagger/register.yaml")
 def register_user():
     data = request.get_json()
 
-    #Check to see if the user has insert all the data
+    #Check to see if the user has inserted all the data
     required_fields = ["email","first_name","last_name","password"]
     for field in required_fields:
         if not data or field not in data or not data[field]:
@@ -125,6 +122,7 @@ def register_user():
                         password
                         ) VALUES(?,?,?,?)""", (email, first_name, last_name, crypted_password))
             conn.commit()
+            #User created successfully
             return jsonify({
                 "message": "Successfully created user"
             }), 200
@@ -156,7 +154,7 @@ def delete_user(id):
                 return jsonify({
                     "error": "Couldnt find the user"
                 }), 400
-            
+            #User deleted successfully
             return jsonify({
                 "message": "User deleted succesfully"
             }), 200
@@ -194,7 +192,7 @@ def login_user():
             if user and bcrypt.checkpw(password.encode('utf-8'), user[1]):
                 print(str(user[0]))
                 jwt_token = create_access_token(identity=str(user[0]))
-
+                #Login successfull
                 return jsonify({
                     "message": "Login successful",
                     "authorization": jwt_token
@@ -242,7 +240,6 @@ def user_information():
             "message": f'{e}'
         }), 500
 
-# Tænk lige over om vi så skal fjerne den første der finder baseret på JWT
 @app.route("/user/<int:id>", methods=["GET"])
 def user_information_search(id):
 
@@ -270,6 +267,6 @@ def user_information_search(id):
             "error": "OOPS! Something went wrong :(",
             "message": f'{e}'
         }), 500
-    
+        
 if __name__ == "__main__":
     app.run(debug=True)
