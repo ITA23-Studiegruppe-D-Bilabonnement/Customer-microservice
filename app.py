@@ -271,35 +271,5 @@ def user_information_search(id):
             "message": f'{e}'
         }), 500
     
-# Egne tanker
-# 1. Giver det mening af have location med( Umiddelbart tænkte jeg ja, men???)
-
-#ONLY TESTNING ENDPOINT - REMOVE AFTER TESTING IS DONE
-# NOTES 
-        #first_row = data[0]
-        #print(first_row[1])
-        #Just some notes on how to access specific data returned
-# JUST ADDED THIS TO FORCE UPDATE ON IMAGE ( DOCKERHUB -> AZURE - CHECK IF THE DATA STAYS)
-
-@app.route("/listofusers", methods=["GET"])
-def test():
-    with sqlite3.connect(DB_PATH) as conn:
-        cur = conn.cursor()
-        cur.execute(""" SELECT email, first_name, last_name FROM users""")
-        data = cur.fetchall()
-
-        #Get the coulmns name
-        columns = [description[0] for description in cur.description]
-
-        #Format the user in json/dict format
-        users = []
-        for row in data:
-            user = dict(zip(columns, row))  
-            users.append(user)
-
-        return jsonify({
-            "message": users
-        })
-
 if __name__ == "__main__":
     app.run(debug=True)
